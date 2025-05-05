@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VEN APRENDE CON KRONOS--Juegos Deportivos_(EN INGLES)</title>
+
+  <!-- Confetti JS -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Flatory Slab Condensed';
+      src: url('FlatorySlabCondensed.ttf');
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 20px;
+      color: rgb(7, 13, 5);
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+      color: #c914c0;
+      font-family: 'Flatory Slab Condensed', sans-serif;
+    }
+
+    .contenedor {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .juego {
+      margin-top: 40px;
+      padding: 20px;
+      background: #66c33b7b;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(207, 14, 14, 0.6);
+    }
+
+    a.boton-juego, button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 30px;
+      background-color: #010101;
+      color: rgb(202, 239, 12);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: transform 0.3s, background-color 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    a.boton-juego:hover, button:hover {
+      background-color: #f800aa91;
+      transform: scale(1.05);
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 795px;
+      height: 690px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(228, 38, 193, 0.2);
+    }
+
+    .valoracion-caritas {
+      text-align: center;
+      margin-top: 40px;
+      background: #111;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .carita {
+      display: inline-block;
+      margin: 10px;
+      cursor: pointer;
+      font-size: 32px;
+      transition: transform 0.2s;
+    }
+
+    .carita:hover {
+      transform: scale(1.2);
+    }
+
+    .carita.selected {
+      transform: scale(1.3);
+      border-bottom: 2px solid #1daf68;
+    }
+
+    .nombre-carita {
+      font-size: 14px;
+      color: white;
+      margin-top: 5px;
+    }
+
+    .puntaje-juego {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .puntaje-juego input {
+      padding: 5px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      width: 80px;
+    }
+    #juego6-container {
+      display: flex;
+      align-items: center;
+      gap: 10px; /* Espacio entre juego y botón */
+      margin-top: 20px;
+    }
+
+    #botonMusica {
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <!-- Música de fondo -->
+  <audio id="audio-fondo" loop autoplay>
+    <source src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" type="audio/mp3">
+  </audio>
+  <button onclick="toggleMusica()" id="boton-musica">⏸️ Pausar música</button>
+  <div class="contenedor">
+    <h1>Juegos Deportivos / Sports Games  ¡¡TÚ PUEDES!!</h1>
+
+    <!-- Lista de Juegos -->
+    <div id="lista-juegos">
+      <!-- Aquí los juegos se insertan dinámicamente -->
+    </div>
+
+    <div style="margin: 60px 0; border-top: 2px solid #1daf68;"></div>
+
+    <h1>Juego de emociones / Game of Emotions</h1>
+
+    <div class="juego">
+      <h3>Juego (6): Responde a partir de un video / Respond from a video</h3>
+      <iframe allow="fullscreen; autoplay;" allowfullscreen
+      src="https://es.educaplay.com/juego/23581126-responde_a_partir_de_una_video.html"></iframe>
+      <div class="puntaje-juego">
+        <p>Puntaje:</p><input type="number" id="puntaje-juego6" value="0" min="0" step="any" onchange="actualizarPuntajeGeneral()">
+      </div>
+    <!-- Botón de música justo al lado del juego 6 -->
+<button onclick="toggleMusica()" id="botonMusica">⏸️ Pausar música</button>
+   </div>
+
+    <div class="juego">
+      <h3>Juego (7): Glosario de Deportes / Sports Glossary</h3>
+      <p>Escribe la traducción al español del término deportivo en inglés.</p>
+      <div id="glosario">
+        <h2 id="palabra-en">Palabra</h2>
+        <input type="text" id="respuesta" placeholder="Escribe la traducción en español" style="padding:10px; width:80%; max-width:400px; border-radius:6px;"/>
+        <br/><br/>
+        <button onclick="verificarRespuesta()">Verificar</button>
+        <p id="feedback" style="margin-top:20px; font-weight:bold;"></p>
+      </div>
+      <div class="puntaje-juego">
+        <p>Puntaje:</p><input type="number" id="puntaje-juego7" value="0" min="0" step="any" onchange="actualizarPuntajeGeneral()">
+      </div>
+    </div>
+
+    <div style="margin: 60px 0; border-top: 2px solid #1d2caf;"></div>
+
+    <!-- Calculadora de Puntaje -->
+    <div class="juego">
+      <h3>Calculadora de puntaje / Score Calculator</h3>
+      <p>Ingresa el puntaje que obtuviste en cada juego (Máx: 610.000):</p>
+      <div id="calculadora-puntaje" style="text-align: center;">
+        <label>Memoria de Deportes: <input type="number" id="p1" min="0" step="any" readonly></label><br><br>
+        <label>Parejas de Deportes: <input type="number" id="p2" min="0" step="any" readonly></label><br><br>
+        <label>Completa la frase: <input type="number" id="p3" min="0" step="any" readonly></label><br><br>
+        <label>Crucigrama: <input type="number" id="p4" min="0" step="any" readonly></label><br><br>
+        <label>Sopa de letras: <input type="number" id="p5" min="0" step="any" readonly></label><br><br>
+        <label>Video emociones: <input type="number" id="p6" min="0" step="any" readonly></label><br><br>
+        <label>Glosario: <input type="number" id="p7" min="0" step="any" readonly></label><br><br>
+
+        <button onclick="calcularPuntaje()">Calcular Puntaje Total</button><br><br>
+        <button onclick="reiniciarPuntajes()" style="background-color:#941616;">Reiniciar Puntajes</button>
+
+        <h2 id="resultado"></h2>
+      </div>
+    </div>
+
+    <!-- Valoración Caritas -->
+    <div class="valoracion-caritas">
+      <h2>¿Cómo te sentiste?</h2>
+      <div>
+        <span class="carita" onclick="seleccionarCarita(this, 'feliz')">😊🤪</span>
+        <span class="carita" onclick="seleccionarCarita(this, 'normal')">😐👍</span>
+        <span class="carita" onclick="seleccionarCarita(this, 'aburrido')">😒🤷🤷‍♀️</span>
+      </div>
+    </div>
+  <div id="lluvia-confeti" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+  </div>
+
+  <script>
+    const juegos = [
+      {
+        titulo: "Juego (1): Memoria de Deportes / Sports Memory",
+        src: "https://es.educaplay.com/juego/23463738-memoria_de_deportes.html",
+        inputId: "puntaje-juego1"
+      },
+      {
+        titulo: "Juego (2): Parejas de Deportes / Sports Couples",
+        src: "https://es.educaplay.com/juego/23464309-juego_de_parejas_deportes.html",
+        inputId: "puntaje-juego2"
+      },
+      {
+        titulo: "Juego (3): Completa la frase / Complete the sentence",
+        src: "https://es.educaplay.com/juego/23464544-juego_de_completar_deportes_en_ingles_y_espanol.html",
+        inputId: "puntaje-juego3"
+      },
+      {
+        titulo: "Juego (4): Crucigrama en inglés / Crossword puzzle",
+        src: "https://www.educaplay.com/game/23464873-crucigrama_de_deportes.html",
+        inputId: "puntaje-juego4"
+      },
+      {
+        titulo: "Juego (5): Sopa de letras / Word search",
+        src: "https://www.educaplay.com/game/23465173-busqueda_de_palabras_deportes.html",
+        inputId: "puntaje-juego5"
+      }
+    ];
+
+    juegos.forEach(juego => {
+      document.getElementById('lista-juegos').innerHTML += `
+        <div class="juego">
+          <h3>${juego.titulo}</h3>
+          <iframe src="${juego.src}" allowfullscreen></iframe>
+          <div class="puntaje-juego">
+            <p>Puntaje:</p>
+            <input type="number" id="${juego.inputId}" value="0" min="0" step="any" onchange="actualizarPuntajeGeneral()">
+          </div>
+        </div>
+      `;
+    });
+
+    function actualizarPuntajeGeneral() {
+      for (let i = 1; i <= 7; i++) {
+        document.getElementById('p' + i).value = document.getElementById('puntaje-juego' + i)?.value || 0;
+      }
+    }
+
+    function calcularPuntaje() {
+      let total = 0;
+      for (let i = 1; i <= 7; i++) {
+        total += parseFloat(document.getElementById('p' + i)?.value) || 0;
+      }
+      document.getElementById('resultado').textContent = "Puntaje total: " + total.toFixed(3);
+      confetti();
+    }
+
+    function reiniciarPuntajes() {
+      document.querySelectorAll('.puntaje-juego input').forEach(input => input.value = 0);
+      actualizarPuntajeGeneral();
+      document.getElementById('resultado').textContent = '';
+    }
+
+    
+    
+   function seleccionarCarita(carita, tipo) {
+    document.querySelectorAll('.carita').forEach(c => c.classList.remove('selected'));
+    carita.classList.add('selected');
+    // Lluvia de confeti
+    if (tipo === 'feliz') {
+      generarLluviaConfeti('feliz');  // Lluvia de corazones
+    } else if (tipo === 'aburrido') {
+      generarLluviaConfeti('aburrido');  // Lluvia de lágrimas
+    } else {
+      // No mostrar lluvia para la opción intermedia
+      document.getElementById('lluvia-confeti').innerHTML = '';
+    }
+  }
+  function generarLluviaConfeti(tipo) {
+    const confetiContainer = document.getElementById('lluvia-confeti');
+    confetiContainer.innerHTML = '';  // Limpiar cualquier confeti anterior
+
+    if (tipo === 'feliz') {
+   // Crear lluvia de corazones (usando emojis de corazón)
+   for (let i = 0; i < 100; i++) {
+        const corazon = document.createElement('span');
+        corazon.textContent = '❤️';  // Corazón rojo
+        corazon.style.position = 'absolute';
+        corazon.style.left = `${Math.random() * window.innerWidth}px`;
+        corazon.style.top = `${Math.random() * window.innerHeight}px`;
+        corazon.style.fontSize = `${Math.random() * 20 + 10}px`;  // Tamaño aleatorio
+        corazon.style.animation = `caerCorazon ${Math.random() * 3 + 2}s linear infinite`;  // Animación para que caigan
+        confetiContainer.appendChild(corazon);
+      } 
+    } else if (tipo === 'aburrido') {
+      // Crear lluvia de lágrimas (usando emojis de lágrima)
+      for (let i = 0; i < 100; i++) {
+      
+        const lagrima = document.createElement('span');
+        lagrima.textContent = '😭';  // Lagrima
+        lagrima.style.position = 'absolute';
+        lagrima.style.left = `${Math.random() * window.innerWidth}px`;
+        lagrima.style.top = `${Math.random() * window.innerHeight}px`;
+        lagrima.style.fontSize = `${Math.random() * 20 + 10}px`;  // Tamaño aleatorio
+        lagrima.style.animation = `caerLagrima ${Math.random() * 3 + 2}s linear infinite`;
+        confetiContainer.appendChild(lagrima);
+      }
+    }
+  }
+
+ // Estilos CSS para las animaciones de lluvia
+ const estiloAnimaciones = document.createElement('style');
+  document.head.appendChild(estiloAnimaciones);
+
+  estiloAnimaciones.innerHTML = `
+    @keyframes caerCorazon {
+      0% { transform: translateY(-100px); opacity: 1; }
+      100% { transform: translateY(${window.innerHeight}px); opacity: 0; }
+    }
+
+    @keyframes caerLagrima {
+      0% { transform: translateY(-100px); opacity: 1; }
+      100% { transform: translateY(${window.innerHeight}px); opacity: 0; }
+    }
+  `;
+  
+
+  const audioFondo = document.getElementById('audio-fondo');
+  const botonMusica = document.getElementById('boton-musica');
+  const iframeJuego6 = document.querySelector('iframe[src*="23472276"]');
+
+  // Alternar música con botón
+  function toggleMusica() {
+    if (audioFondo.paused) {
+      audioFondo.play();
+      botonMusica.textContent = '⏸️ Pausar música';
+    } else {
+      audioFondo.pause();
+      botonMusica.textContent = '▶️ Reproducir música';
+    }
+  }
+
+  // Escuchar eventos de reproducción dentro del iframe (requiere que el video permita comunicación)
+  window.addEventListener("message", function (event) {
+    if (typeof event.data === "string" && event.data.includes("play")) {
+      audioFondo.pause();
+      botonMusica.textContent = '▶️ Reproducir música';
+    }
+    if (typeof event.data === "string" && event.data.includes("pause")) {
+      audioFondo.play();
+      botonMusica.textContent = '⏸️ Pausar música';
+    }
+  }, false);
+
+</script>
+
+<script>
+  const palabras = [
+    { en: "soccer", es: "futbol" },
+    { en: "basketball", es: "baloncesto" },
+    { en: "voleyball", es: "voleybol" },
+    { en: "tennis", es: "tenis" },
+    { en: "skating", es: "patinaje" },
+    { en: "gymnastics", es: "gimnasia" },
+    { en: "swimming", es: "natacion" },
+    { en: "cycling", es: "ciclismo" },
+    { en: "boxing", es: "boxeo" },
+    { en: "fencing", es: "esgrima" }
+  ];
+
+  let palabraActual = {};
+  let puntajeGlosario = 0;
+
+  function nuevaPalabra() {
+    palabraActual = palabras[Math.floor(Math.random() * palabras.length)];
+    document.getElementById('palabra-en').textContent = palabraActual.en;
+    document.getElementById('respuesta').value = '';
+    document.getElementById('feedback').textContent = '';
+  }
+
+  function verificarRespuesta() {
+  const respuestaUsuario = document.getElementById('respuesta').value.trim().toLowerCase();
+  if (respuestaUsuario === palabraActual.es.toLowerCase()) {
+    document.getElementById('feedback').textContent = "✅ ¡Correcto!";
+    puntajeGlosario += 10;  // Se suma 10 puntos por respuesta correcta
+    document.getElementById('puntaje-juego7').value = puntajeGlosario;
+    actualizarPuntajeGeneral();
+    confetti();
+  } else {
+    document.getElementById('feedback').textContent = `❌ Incorrecto. Era: ${palabraActual.es}`;
+    puntajeGlosario = Math.max(0, puntajeGlosario - 10);  // Se resta 10 puntos por respuesta incorrecta, sin permitir puntajes negativos
+    document.getElementById('puntaje-juego7').value = puntajeGlosario;
+    actualizarPuntajeGeneral();
+  }
+  setTimeout(nuevaPalabra, 2000);
+}
+window.onload = () => {
+  nuevaPalabra();
+};
+</script>
+
+</body>
+</html>
